@@ -8,8 +8,10 @@ import {
   HttpException,
   HttpStatus,
   Delete,
+  UseFilters,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
+import { HttpExceptionFilter } from 'src/exception-filters/http-exception.filter';
 
 @Controller('products')
 export class ProductsController {
@@ -29,6 +31,7 @@ export class ProductsController {
     } catch (error) {
       throw new HttpException(
         {
+          // this is what gets sent to the user as the response
           status: HttpStatus.FORBIDDEN,
           error: 'This is a custom message',
         },

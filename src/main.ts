@@ -1,7 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from './exception-filters/http-exception.filter';
+import { logger } from './middleware/logger.middleware';
 //express platform is used by default
 async function bootstrap() {
 
@@ -16,6 +18,8 @@ async function bootstrap() {
   }));
   //If we want to add global middleware
   // app.use(LoggerMiddleware)
+  const loggerInstance=app.get(logger);
+  app.useGlobalFilters(new HttpExceptionFilter(loggerInstance));
   await app.listen(3000);
 }
 bootstrap();
